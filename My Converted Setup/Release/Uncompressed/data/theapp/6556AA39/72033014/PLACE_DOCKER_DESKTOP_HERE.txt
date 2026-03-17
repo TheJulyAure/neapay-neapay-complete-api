@@ -1,0 +1,26 @@
+================================================================
+  Docker Desktop Bundling (Optional)
+================================================================
+
+To bundle Docker Desktop with the installer:
+
+1. Download Docker Desktop for Windows:
+   https://www.docker.com/products/docker-desktop
+
+2. Rename the downloaded file to:
+   DockerDesktop.exe
+
+3. Place it in this folder:
+   payload\third-party\DockerDesktop.exe
+
+4. The installer will automatically:
+   - Detect if Docker Desktop is already installed
+   - Silently install Docker Desktop if not present
+   - Wait for installation to complete
+   - Verify Docker service is running
+
+Note: Docker Desktop bundling adds ~500MB to the installer size.
+If you don't want to bundle Docker, leave this folder empty and
+the installer will prompt users to install Docker manually.
+
+================================================================

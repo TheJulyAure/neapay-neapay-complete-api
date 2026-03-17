@@ -1,0 +1,142 @@
+version: '3.8'
+
+services:
+  penthouse-api:
+    build:
+      context: ./penthouse-api
+      dockerfile: Dockerfile
+    image: neapay-api:latest
+    container_name: penthouse-api
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: staging
+      PORT: 3000
+      LOG_LEVEL: debug
+      DATABASE_URL: ${DATABASE_URL:-postgresql://neapay:password@postgres:5432/neapay}
+      REDIS_URL: ${REDIS_URL:-redis://:password@redis:6379}
+      API_KEY: ${API_KEY:-staging-api-key}
+      SECRET_KEY: ${SECRET_KEY:-staging-secret}
+    networks:
+      - unified
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./logs/api:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: neapay-frontend:latest
+    container_name: neapay-frontend-staging
+    restart: always
+    ports:
+      - "5173:80"
+    environment:
+      VITE_API_URL: http://localhost:3000
+      VITE_ENV: staging
+    networks:
+      - unified
+    depends_on:
+      penthouse-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - ./logs/frontend:/var/log/nginx
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "3"
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: neapay-postgres-staging
+    restart: always
+    environment:
+      POSTGRES_USER: neapay
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: neapay
+    networks:
+      - unified
+    volumes:
+      - postgres-data-staging:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U neapay"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  redis:
+    image: redis:7-alpine
+    container_name: neapay-redis-staging
+    restart: always
+    command: redis-server --appendonly yes
+    networks:
+      - unified
+    volumes:
+      - redis-data-staging:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: neapay-prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=7d'
+    networks:
+      - unified
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+networks:
+  unified:
+    driver: bridge
+
+volumes:
+  postgres-data-staging:
+  redis-data-staging:
+  prometheus-data:

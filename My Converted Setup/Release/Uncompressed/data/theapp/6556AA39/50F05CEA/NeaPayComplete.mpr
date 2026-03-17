@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="14.0" productVersion="1.0.0.0" productEdition="Windows Installer" schemaVersion="2.0">
+  <projectInfo>
+    <projectName>NeaPay Complete</projectName>
+    <projectVersion>1.0.0</projectVersion>
+    <projectDescription>Enterprise Payment Processing Platform</projectDescription>
+    <manufacturer>NeaPay</manufacturer>
+    <copyright>Copyright © 2024 NeaPay</copyright>
+    <productCode>{NEAPAY-COMPLETE-1.0.0}</productCode>
+    <upgradeCode>{NEAPAY-COMPLETE-UPGRADE}</upgradeCode>
+  </projectInfo>
+  
+  <variables>
+    <variable name="SOURCE_DIR">$SUPPORTDIR$\payload</variable>
+    <variable name="DOCKER_INSTALLER">$SUPPORTDIR$\payload\third-party\docker-desktop-installer.exe</variable>
+    <variable name="ICON_FILE">$SUPPORTDIR$\installer\NeaPayComplete.ico</variable>
+    <variable name="INSTALL_DIR">$PROGRAMFILES$\NeaPay\Complete</variable>
+    <variable name="API_PORT">8080</variable>
+    <variable name="FRONTEND_PORT">3000</variable>
+    <variable name="CONFIG_DIR">$APPDATA$\NeaPay\Complete\config</variable>
+    <variable name="DATA_DIR">$APPDATA$\NeaPay\Complete\data</variable>
+    <variable name="LOGS_DIR">$APPDATA$\NeaPay\Complete\logs</variable>
+  </variables>
+
+  <installSeq>
+    <action name="Execute InstallScript"/>
+  </installSeq>
+
+  <files>
+    <file source="$SUPPORTDIR$\payload\neapay-complete" destination="$INSTALL_DIR\" recurse="true"/>
+    <file source="$SUPPORTDIR$\payload\docker" destination="$INSTALL_DIR\docker\" recurse="true"/>
+    <file source="$SUPPORTDIR$\payload\config" destination="$CONFIG_DIR\" recurse="true"/>
+  </files>
+
+  <registry>
+    <key path="HKLM\Software\NeaPay\Complete">
+      <value name="InstallPath" value="$INSTALL_DIR\" type="string"/>
+      <value name="Version" value="1.0.0" type="string"/>
+      <value name="APIPort" value="8080" type="dword"/>
+      <value name="FrontendPort" value="3000" type="dword"/>
+    </key>
+  </registry>
+
+  <shortcuts>
+    <shortcut name="NeaPay Complete" target="$INSTALL_DIR\open-browser.ps1" icon="$ICON_FILE" workingDir="$INSTALL_DIR"/>
+    <shortcut name="Uninstall" target="$INSTDIR\Uninstall.exe" workingDir="$INSTDIR"/>
+  </shortcuts>
+
+  <buildSettings>
+    <compressionLevel>9</compressionLevel>
+    <outputPath>$PROJECT_DIR$\dist</outputPath>
+    <installerName>NeaPayComplete-1.0.0-Setup.exe</installerName>
+  </buildSettings>
+</project>

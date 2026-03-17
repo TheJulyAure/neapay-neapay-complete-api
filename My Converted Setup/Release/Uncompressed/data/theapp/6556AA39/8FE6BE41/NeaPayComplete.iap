@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="14.0" productVersion="14.0.0.0" productEdition="Windows Installer" schemaVersion="2.0">
+
+  <!-- ===================================================== -->
+  <!-- NeaPay Complete - Enterprise Installer              -->
+  <!-- Version: 1.0.0                                       -->
+  <!-- Author: Eric Miller                                  -->
+  <!-- ===================================================== -->
+
+  <!-- Project Information -->
+  <projectInfo>
+    <productName>NeaPay Complete</productName>
+    <productVersion>1.0.0</productVersion>
+    <companyName>NeaPay</companyName>
+    <copyright>Copyright (c) 2024 NeaPay. All rights reserved.</copyright>
+    <productURL>https://neapay.com</productURL>
+    <supportURL>https://support.neapay.com</supportURL>
+  </projectInfo>
+
+  <!-- Installation Variables -->
+  <variables>
+    <variable name="INSTALL_DIR" value="$PROGRAMFILES$\NeaPay\Complete" />
+    <variable name="CONFIG_DIR" value="$INSTALL_DIR$\config" />
+    <variable name="DATA_DIR" value="$INSTALL_DIR$\data" />
+    <variable name="LOGS_DIR" value="$INSTALL_DIR$\logs" />
+    <variable name="API_PORT" value="8080" />
+    <variable name="FRONTEND_PORT" value="3000" />
+  </variables>
+
+  <!-- Requirements -->
+  <requirements>
+    <requirement name="os" value="windows" minVersion="10.0.17763" />
+    <requirement name="ram" value="4096" />
+    <requirement name="diskSpace" value="500" />
+  </requirements>
+
+  <!-- Install Sequence -->
+  <installSequence>
+    <action name="preinstall" ref="Scripts/InstallScript.miax" function="preinstall" />
+    <action name="install" ref="Scripts/InstallScript.miax" function="install" />
+    <action name="postinstall" ref="Scripts/InstallScript.miax" function="postinstall" />
+  </installSequence>
+
+  <!-- Uninstall Sequence -->
+  <uninstallSequence>
+    <action name="uninstall" ref="Scripts/InstallScript.miax" function="uninstall" />
+  </uninstallSequence>
+
+  <!-- File Groups -->
+  <fileGroups>
+    <fileGroup name="Application Files">
+      <description>Core application files</description>
+      <destination>${INSTALL_DIR}</destination>
+      <source>../**</source>
+      <recursive>true</recursive>
+    </fileGroup>
+    <fileGroup name="Configuration Templates">
+      <description>Configuration templates</description>
+      <destination>${CONFIG_DIR}</destination>
+      <source>../config/**</source>
+      <recursive>true</recursive>
+    </fileGroup>
+  </fileGroups>
+
+  <!-- Registry Entries -->
+  <registry>
+    <key path="HKLM\Software\NeaPay\Complete">
+      <value name="InstallPath" value="${INSTALL_DIR}" type="string" />
+      <value name="Version" value="1.0.0" type="string" />
+      <value name="ApiPort" value="${API_PORT}" type="dword" />
+      <value name="FrontendPort" value="${FRONTEND_PORT}" type="dword" />
+    </key>
+  </registry>
+
+  <!-- Shortcuts -->
+  <shortcuts>
+    <shortcut name="NeaPay Complete" type="desktop">
+      <target>powershell.exe</target>
+      <arguments>-ExecutionPolicy Bypass -File "${INSTALL_DIR}\open-browser.ps1"</arguments>
+      <icon>${SUPPORTDIR}\icon.ico</icon>
+      <workingDir>${INSTALL_DIR}</workingDir>
+    </shortcut>
+    <shortcut name="NeaPay Complete" type="startMenu">
+      <subfolder>NeaPay</subfolder>
+      <target>powershell.exe</target>
+      <arguments>-ExecutionPolicy Bypass -File "${INSTALL_DIR}\open-browser.ps1"</arguments>
+      <icon>${SUPPORTDIR}\icon.ico</icon>
+      <workingDir>${INSTALL_DIR}</workingDir>
+    </shortcut>
+  </shortcuts>
+
+  <!-- Build Settings -->
+  <buildSettings>
+    <outputName>NeaPayComplete-Setup</outputName>
+    <outputDirectory>./Installers</outputDirectory>
+    <compression>lzma</compression>
+    <installerType>exe</installerType>
+    <compressionLevel>9</compressionLevel>
+  </buildSettings>
+
+</project>

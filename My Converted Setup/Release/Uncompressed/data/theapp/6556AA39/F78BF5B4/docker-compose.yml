@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  penthouse-api:
+    build:
+      context: ./penthouse-api
+      dockerfile: Dockerfile
+    container_name: penthouse-api
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+    networks:
+      - unified
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: neapay-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      penthouse-api:
+        condition: service_healthy
+    networks:
+      - unified
+
+networks:
+  unified:
+    driver: bridge

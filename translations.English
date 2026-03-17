@@ -1,0 +1,752 @@
+﻿$TITLE$ Setup
+Space available:
+Total space required:
+Space available:
+Total space required:
+Description
+
+Cancel
+&Next
+
+Choose features
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+
+Total space required:
+Space available:
+Total space required:
+Space available:
+Cancel
+&Next
+
+Choose folder
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+
+
+
+Cancel
+&Next
+
+&Domain:
+&Password:
+&Administrator account:
+InstallAware Direct Deploy
+InstallAware Direct Deploy requires Active Directory.
+Please enter your domain administrator user name and password below:
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+Progress
+$DD_PROGRESS$
+
+
+You may need to logon, or run this setup as, a domain administrator.
+This might take a few minutes.
+InstallAware Direct Deploy
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+&Install
+&Uninstall
+&Reinstall
+$DD_ABSENT$$NEWLINE$
+$DD_PRESENT$$NEWLINE$
+Close
+&Query
+
+Not found on systems:
+InstallAware Direct Deploy Query
+Installed on systems:
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+&Run $TITLE$ now
+&Reboot computer now
+Cancel
+&Finish
+
+$TITLE$ installation failed: "$LASTERROR$". Please check your settings and try again.
+$TITLE$ has been successfully installed.
+$TITLE$ has been successfully installed. Your computer needs to be restarted for the changes to take effect.
+$TITLE$ has been successfully uninstalled.
+$SUCCESS$
+$REMOVE$
+$TITLE$ installation was cancelled. Please try again at a later time.
+$TITLE$ Setup
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+Cancel
+&Next
+
+Scroll to the bottom of the document to indicate that you accept it.
+The following are the terms and conditions which govern your use of this software.
+Read the license agreement
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+&Repair
+&Change features
+&Delete
+Cancel
+&Next
+
+The InstallAware Wizard will change the way $TITLE$ is installed on your computer.
+$TITLE$ Setup
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+Cancel
+&Next
+
+System Update
+The following updates will be installed:
+$PRELIST$
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+Progress
+Installing $TITLE$...
+
+Cancel
+&Next
+
+You may need to restart your computer to finish installing $TITLE$.
+Your computer might download some packages from the Internet.
+This might take a few minutes.
+$TITLE$ Setup
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+Progress
+Installing updates...
+
+Cancel
+&Next
+
+You may need to restart your computer to finish installing updates.
+Your computer might download some updates from the Internet.
+This might take a few minutes.
+System Update
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+Cancel
+&Next
+
+The information below supercedes your product documentation.
+This information was not available at the time product documentation was sent to press.
+Late breaking information
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+
+
+Cancel
+&Next
+
+Your &company:
+Your &name:
+Provide the following information.
+Each copy of $TITLE$ must be personalized.
+Personalize $TITLE$
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+
+
+
+
+
+
+
+Cancel
+&Next
+
+&Product key:
+Your &company:
+Your &name:
+PRODUCT KEY: XXXXX-XXXXX-XXXXX-XXXXX-XXXXX
+The product key looks like this:
+Type your product key
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+&Some features
+&Least required features
+&All features
+Cancel
+&Next
+
+Which features of $TITLE$ do you want to install?
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+Cancel
+&Next
+
+Click Next to continue.
+Ready to make changes to your computer.
+$TITLE$ Setup
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+Create shortcuts just for &me
+Create shortcuts for &all users of this computer
+
+Cancel
+&Next
+
+Shortcuts may be created for all users of this computer, or just for you.
+Program &group name:
+Type a program group name
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$
+Cancel
+< &Back
+&Next >
+InstallAware
+$GLASS$
+InstallAware
+Download Progress:
+Download status:
+The updates are being downloaded
+The InstallAware Wizard is downloading $TITLE$ updates
+$TITLE$
+Cancel
+< &Back
+&Next >
+InstallAware
+$GLASS$
+InstallAware
+Selected updates that were successfully downloaded are now being installed.
+Installation status:
+The updates are being installed
+The InstallAware Wizard is installing $TITLE$ updates
+$TITLE$
+Cancel
+&Download
+$UPDATE_AVAILABLE$$NEWLINE$
+InstallAware
+$GLASS$
+InstallAware
+$UPDATE_SCHEDULING$
+Details
+Change automatic update settings
+Update Title
+Choose updates to download
+The InstallAware Wizard has found the following updates for $TITLE$.
+$TITLE$
+Cancel
+&Install
+$UPDATE_SELECTED$$NEWLINE$
+InstallAware
+$GLASS$
+InstallAware
+$UPDATE_SCHEDULING$
+Details
+Change automatic update settings
+Update Title
+Choose updates to install
+The InstallAware Wizard has downloaded the following updates for $TITLE$.
+$TITLE$
+Restart &Later
+Restart &Now
+Do you want to restart your computer now?
+Updating $TITLE$ is almost complete. You must restart your computer for the updates to take effect.
+$TITLE$
+Cancel
+< &Back
+&Next >
+
+
+
+InstallAware
+$GLASS$
+InstallAware
+You may leave the password field blank. However, the scheduled update search may not run with a blank password.
+&Confirm password:
+Enter your &password:
+Enter your user n&ame:
+Logon Credentials
+The update search needs to be scheduled using your username and password.
+$TITLE$
+Cancel
+< &Back
+&Finish
+$GLASS$
+InstallAware
+To close this wizard, click Finish.
+Completing the InstallAware Wizard for $TITLE$ Updates
+To change your notification option, click Back.
+You have successfully completed the InstallAware Wizard for $TITLE$ Updates. InstallAware has saved your notification option.
+$TITLE$
+Cancel
+< &Back
+&Next >
+Every day$NEWLINE$Every Sunday$NEWLINE$Every Monday$NEWLINE$Every Tuesday$NEWLINE$Every Wednesday$NEWLINE$Every Thursday$NEWLINE$Every Friday$NEWLINE$Every Saturday$NEWLINE$
+12:00 AM$NEWLINE$1:00 AM$NEWLINE$2:00 AM$NEWLINE$3:00 AM$NEWLINE$4:00 AM$NEWLINE$5:00 AM$NEWLINE$6:00 AM$NEWLINE$7:00 AM$NEWLINE$8:00 AM$NEWLINE$9:00 AM$NEWLINE$10:00 AM$NEWLINE$11:00 AM$NEWLINE$12:00 PM$NEWLINE$1:00 PM$NEWLINE$2:00 PM$NEWLINE$3:00 PM$NEWLINE$4:00 PM$NEWLINE$5:00 PM$NEWLINE$6:00 PM$NEWLINE$7:00 PM$NEWLINE$8:00 PM$NEWLINE$9:00 PM$NEWLINE$10:00 PM$NEWLINE$11:00 PM$NEWLINE$
+A&utomatically download the updates, and install them
+&Download the updates automatically and notify me when they are ready to be installed
+N&otify me before downloading any updates and notify me again before installing them on my computer
+ Settings 
+&Keep my computer up to date. Check for updates:
+InstallAware
+$GLASS$
+InstallAware
+at
+Notification Settings
+The InstallAware Wizard can find the updates you need for $TITLE$ and deliver them directly to your computer.
+$TITLE$
+Cancel
+< &Back
+&Next >
+$GLASS$
+InstallAware
+To continue, click Next.
+NOTE: InstallAware does not collect any form of personally identifiable information from your computer.
+This wizard helps you set up InstallAware to automatically deliver important updates for $TITLE$ to your computer, using your Internet connection.
+Welcome to the InstallAware Wizard for $TITLE$ Updates
+$TITLE$ Setup
+Cancel
+&Next
+
+Click Next to continue.
+The InstallAware Wizard will install $TITLE$ on your computer.
+$TITLE$ Setup
+$TITLE$ Setup - InstallAware Wizard
+$TITLE$ Setup
+Cancel
+&Next
+
+Wizard step
+Description of step
+Instructions for step
+$TITLE$ Setup - InstallAware Wizard
+$SHORTCUTFILES$
+Installing $TITLE$
+
+
+$SHORTCUTFILESALL$\$STARTMENU$
+$SHORTCUTFILES$\$STARTMENU$
+100
+100
+FALSE
+
+
+$PRELIST$$NEWLINE$Previous Version Uninstallation
+TRUE
+
+FALSE
+$TITLE$
+$PROGRAMFILES$\$TITLE$
+$PROGRAMFILES_X86$\$TITLE$
+$PRELIST$$NEWLINE$Previous Version Removal
+TRUE
+$NATIVE_OLDLOG$
+
+TRUE
+FALSE
+$NATIVE_ENGINE_MODE$
+TRUE
+$NATIVE_ENGINE$
+Uninstalling $TITLE$
+Uninstall #TITLE#
+Removes this InstallAware Software Corporation product
+My Setup
+Description for #TITLE#
+My Setup
+$TITLE$ Setup
+Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+$TITLE$ Setup
+Unable to uninstall old version of $TITLE$. Please uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$ERROROLD$
+$TITLE$ Setup
+Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+$TITLE$ Setup
+Unable to uninstall old version of $TITLE$. It is strongly recommended that you uninstall it yourself using Control Panel Add-Remove Programs before attempting to install this product.$NEWLINE$$NEWLINE$$LASTERROR$$NEWLINE$$NEWLINE$Click OK to quit $TITLE$ Setup.$NEWLINE$$NEWLINE$Click Cancel to continue $TITLE$ Setup anyways (not recommended).
+$TITLE$ Setup Error
+This product requires at least a 64 bit operating system.$NEWLINE$$NEWLINE$Setup cannot continue.
+$TITLE$ Setup Error
+This product requires at least Windows Vista.$NEWLINE$$NEWLINE$Setup cannot continue.
+My Setup
+My Setup
+SHORTCUTFILESALL
+
+MAINTENANCE
+TRUE
+BUILDMODE
+PATCH
+WIZARD
+CANCEL
+BUILDMODE
+PATCH
+WIZARD
+BACK
+WIZARD
+CANCEL
+WIZARD
+BACK
+WIZARD
+CANCEL
+WIZARD
+BACK
+WIZARD
+CANCEL
+WIZARD
+BACK
+WIZARD
+CANCEL
+MINIMUM
+TRUE
+COMPLETE
+TRUE
+WIZARD
+BACK
+WIZARD
+CANCEL
+WIZARD
+BACK
+WIZARD
+CANCEL
+WIZARD
+BACK
+WIZARD
+CANCEL
+WIZARD
+BACK
+BUILDMODE
+PATCH
+WIZARD
+CANCEL
+ALLUSERS
+TRUE
+REMOVE
+TRUE
+SELECTED
+TRUE
+BUILDMODE
+PATCH
+ADVERTISE
+TRUE
+SUCCESS
+COMPLETE
+REMOVE
+FALSE
+RUNAPP
+TRUE
+SUCCESS
+REBOOT
+REBOOTCOMPUTER
+TRUE
+SILENT
+FALSE
+REBOOTNOW
+OK
+REMOVEOLD
+REBOOT
+REMOVEOLD
+ERROR
+NEEDSUPGRADE
+TRUE
+BUILDMODE
+PATCH
+WIZARD
+CANCEL
+PREREQ
+FALSE
+NEEDSUPGRADE
+TRUE
+BUILDMODE
+PATCH
+RECOMMENDEDUPGRADE
+TRUE
+RECOMMENDEDUPGRADE
+TRUE
+NATIVE_UNINSTALL
+REBOOT
+REBOOTNOW
+OK
+NATIVE_UNINSTALL
+COMPLETE
+NATIVE_ERROR
+OK
+NATIVE_ENGINE
+TRUE
+MODIFY
+TRUE
+SUCCESS
+CANCEL
+REPAIR
+TRUE
+MAINTENANCE
+TRUE
+CHECKSYSTEM
+TRUE
+CHECKSYSTEM
+TRUE
+Updating $DDCOMPUTER$
+Copying $SFXPATH$\$SFXFILE$$NEWLINE$to \\$DDCOMPUTER$\admin$\$REVISIONCODE$\$SFXFILE$
+Updating network...
+Querying domain $DD_DOMAIN$$NEWLINE$Using server $DDLOGONSERVER$
+Checking network...
+MARQUEE
+/s
+/s REMOVE=TRUE MODIFY=FALSE
+Updating $DDCOMPUTER$
+Copying $SFXPATH$\$SFXFILE$$NEWLINE$to \\$DDCOMPUTER$\admin$\$REVISIONCODE$\$SFXFILE$
+/s REMOVE=TRUE MODIFY=FALSE
+$DD_PRESENT_SELECTION$
+/s MODIFY=FALSE REPAIR=TRUE
+/s
+Updating network...
+$DDWIZARD$
+$DD_ABSENT$$NEWLINE$$DDCOMPUTER$
+$DDCOMPUTER$
+$DD_PRESENT$$NEWLINE$$DDCOMPUTER$$DDVERSION$
+$DDCOMPUTER$$DDVERSION$
+0
+0
+
+
+
+
+
+Scanning network...
+Querying domain $DD_DOMAIN$$NEWLINE$Using server $DDLOGONSERVER$
+Checking network...
+MARQUEE
+
+DC=$DD_DOMAIN$
+YES
+TRUE
+$DD_ABSENT_SELECTION$
+$DD_PRESENT_SELECTION$
+
+ (Version $DDMAJOR$.$DDMINOR$)
+Reading remote registry on $DDCOMPUTER$
+Contacting $DDCOMPUTER$...
+Contacting $DDCOMPUTER$...
+Contacting $DDCOMPUTER$...
+$NATIVE_ENGINE_BACKUP_DD$
+TRUE
+$NATIVE_ENGINE$
+RemoteRegistry
+$TITLE$
+Remote installation failed on $DDCOMPUTER$.$NEWLINE$$NEWLINE$Please ensure that $DDCOMPUTER$ is turned on.$NEWLINE$$NEWLINE$Display further error messages?
+$TITLE$
+Remote installation failed on $DDCOMPUTER$.$NEWLINE$$NEWLINE$Please ensure that $DDCOMPUTER$ is turned on.$NEWLINE$$NEWLINE$Display further error messages?
+DDERROR
+CANCEL
+DDERROR
+NO
+DDREMOTE
+
+ABORT
+TRUE
+CMDLINE
+/ddu
+DDCOMPUTERS
+
+ABORT
+TRUE
+CMDLINE
+/ddu
+DDERROR
+CANCEL
+DDERROR
+NO
+DDREMOTE
+
+ABORT
+TRUE
+DDWIZARDEX
+UNINSTALL
+DDWIZARDEX
+UNINSTALL
+DDWIZARDEX
+REINSTALL
+DDWIZARDEX
+INSTALL
+DD_ABSENT
+
+DD_PRESENT
+
+DDREGISTRY
+
+DDWIZARD
+CANCEL
+CMDLINE
+/ddq
+DDWIZARD
+CANCEL
+CMDLINE
+/dd
+DDWIZARDEX
+CANCEL
+DDWIZARDEX
+NEXT
+DDMAJOR
+
+DDMINOR
+
+DDCOMPUTEROK
+TRUE
+DDCOMPUTEROK
+TRUE
+DDCOMPUTEROK
+TRUE
+TRUE
+$PRELIST$$NEWLINE$Windows Features Configuration
+Installing Windows Features
+MARQUEE
+$PROGRESSMODE$
+$PROGRESSMODEBACKUP$
+
+$TITLE$ Setup
+Some required Windows Features could not be installed.$NEWLINE$$NEWLINE$Please install the necessary Windows Features manually on your system.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+$TITLE$ Setup
+Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+SETUP_WINDOWSFEATURES
+SUCCESS
+REBOOTNOW
+OK
+SETUP_WINDOWSFEATURES
+REBOOT_REQUIRED
+$PRELIST$$NEWLINE$Windows Internet Explorer 11 (x64)
+TRUE
+FALSE
+FALSE
+TRUE
+FALSE
+$TITLE$ Setup
+$TITLE$ requires a 64 bit operating system. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+$TITLE$ Setup
+$TITLE$ requires Service Pack 1. Please use Windows Update to install at least Service Pack 1, and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+$TITLE$ Setup
+$TITLE$ requires Windows Internet Explorer 11 (x64), which is not available for your operating system. Please upgrade your operating system to Windows 7 Service Pack 1 or newer, and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+$TITLE$ Setup
+$TITLE$ requires Windows Internet Explorer 11, which is available as OS update for your operating system. Please upgrade your operating system to Windows 8.1  and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+IE11_WIN61_X64
+FALSE
+IE11_X64
+FALSE
+ISWINDOWS64BIT
+TRUE
+IE11_SP1_X64
+FALSE
+WIN81_X64
+TRUE
+IE11_WIN62_X64
+TRUE
+
+FALSE
+/norestart /update-no /closeprograms /quiet
+
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+TRUE
+Installing required IE 11 (x64) system updates
+MARQUEE
+MARQUEE
+Installing Windows Internet Explorer 11 (x64)
+TRUE
+$TITLE$ Setup
+Windows Internet Explorer 11 (x64) could not be installed. Please use Windows Update to manually install this update on your system.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+$TITLE$ Setup
+Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+$TITLE$ Setup
+Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+IE11_X64
+TRUE
+REBOOTNOW
+OK
+IE11_X64
+3010
+IE11_X64
+3010
+IE11_X64
+FALSE
+IE11_WIN61_X64
+TRUE
+REBOOTNOW
+OK
+IE11_WANTSREBOOT_X64
+TRUE
+IE11_X64
+3010
+IE11_X64
+3010
+IE11_X64
+3010
+IE11_X64
+3010
+IE11_X64
+3010
+IE11_X64
+3010
+FALSE
+TRUE
+TRUE
+$PRELIST$$NEWLINE$NEAPAY1
+FALSE
+$TITLE$ Setup
+$TITLE$ requires at least Windows 10 or Windows Server 2016. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+$TITLE$ Setup
+$TITLE$ requires a 64 bit operating system. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+X64_NEAPAY1
+TRUE
+INSTALLED_NEAPAY1
+NOTINSTALLED
+OS_NEAPAY1
+TRUE
+Downloading NEAPAY1
+
+Installing NEAPAY1
+
+
+$TITLE$ Setup
+Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+$TITLE$ Setup
+NEAPAY1 could not be installed.$NEWLINE$$NEWLINE$$ERROR_NEAPAY1$$NEWLINE$$NEWLINE$Please manually install NEAPAY1 on your system.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+INSTALLED_NEAPAY1
+FALSE
+RESULT_NEAPAY1
+REBOOT
+REBOOT_NEAPAY1
+OK
+RESULT_NEAPAY1
+ERROR
+$PRELIST$$NEWLINE$Microsoft Windows Installer 4.5
+TRUE
+$TITLE$ Setup
+$TITLE$ requires at least Service Pack 1 on Windows Server 2003. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+$TITLE$ Setup
+$TITLE$ requires at least Service Pack 2 on Windows XP. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+$TITLE$ Setup
+$TITLE$ requires at least Windows XP Service Pack 2 or later. Please upgrade your operating system and try again.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+MSI45
+FALSE
+ISSP1
+FALSE
+ISSP1
+FALSE
+ISSP2
+FALSE
+ISXP
+FALSE
+IS2003
+FALSE
+ISVISTA
+FALSE
+MSI45
+FALSE
+Installing Microsoft Windows Installer 4.5
+MARQUEE
+
+
+$TITLE$ Setup
+Your computer needs to be restarted before $TITLE$ Setup can continue.$NEWLINE$$NEWLINE$Please save your work in all running programs and click OK to restart your computer. Setup will resume once your computer restarts.$NEWLINE$$NEWLINE$If you click CANCEL, setup will exit. You will have to run setup again at a later time to install $TITLE$.
+$TITLE$ Setup
+Windows Installer 4.5 could not be installed. Please use Windows Update to manually install this update on your system.$NEWLINE$$NEWLINE$$TITLE$ Setup cannot continue.
+REBOOTNOW
+OK
+MSI45
+0
+MSI45
+FALSE
+ISVISTA
+TRUE
+MSI45
+3010
+IS2003
+TRUE

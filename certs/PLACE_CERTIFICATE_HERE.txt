@@ -1,0 +1,27 @@
+================================================================
+  Code Signing Certificate (Required for signed builds)
+================================================================
+
+To sign the installer with your organization's certificate:
+
+1. Obtain a code signing certificate from a trusted CA:
+   - Sectigo (formerly Comodo)
+   - DigiCert
+   - GlobalSign
+   - Entrust
+   - Your organization's PKI
+
+2. Export the certificate as a .pfx file:
+   - Include the private key
+   - Set a strong password
+
+3. Place the .pfx file in this folder:
+   certs\NeaPayCodeSign.pfx (or your preferred name)
+
+4. Run the signing script:
+   .\installer\sign-installer.ps1 -CertPassword "yourpassword"
+
+The signed installer will appear in dist\ with a valid digital
+signature that Windows will trust.
+
+================================================================

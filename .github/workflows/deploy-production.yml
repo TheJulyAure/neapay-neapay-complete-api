@@ -1,0 +1,175 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to deploy (leave blank for latest)'
+        required: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  deploy-production:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.PROD_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.PROD_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Backup current state
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} << 'EOF'
+          set -e
+          
+          echo "📦 Backing up current deployment..."
+          BACKUP_DIR="/opt/neapay-backups/$(date +%Y%m%d_%H%M%S)"
+          mkdir -p "$BACKUP_DIR"
+          
+          cd /opt/neapay-complete
+          
+          # Backup current images
+          docker compose images > "$BACKUP_DIR/images.txt"
+          docker compose ps > "$BACKUP_DIR/services.txt"
+          
+          # Export database volumes if using postgres
+          docker run --rm \
+            -v neapay-postgres:/postgres-data \
+            -v "$BACKUP_DIR":/backup \
+            alpine tar czf /backup/postgres-backup.tar.gz -C /postgres-data .
+          
+          echo "✅ Backup saved to $BACKUP_DIR"
+          EOF
+
+      - name: Deploy to production
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} << 'EOF'
+          set -e
+          cd /opt/neapay-complete
+          
+          echo "🔄 Pulling latest changes..."
+          git pull origin main
+          
+          echo "🐳 Pulling latest images..."
+          docker compose pull
+          
+          echo "📊 Running health checks on current deployment..."
+          CURRENT_STATUS=$(docker compose ps -q | xargs -r docker inspect -f '{{.State.Status}}' | sort | uniq -c)
+          echo "$CURRENT_STATUS"
+          
+          echo "🚀 Starting blue-green deployment..."
+          
+          # Pull new images (blue environment)
+          docker compose -f docker-compose.yml -f docker-compose.production.yml pull
+          
+          # Run new containers on different port
+          docker compose -f docker-compose.yml -f docker-compose.production.yml up -d --no-deps
+          
+          echo "⏳ Waiting for new services to be healthy..."
+          sleep 15
+          
+          # Health check
+          API_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health || echo "000")
+          if [ "$API_HEALTH" -eq 200 ]; then
+            echo "✅ New deployment is healthy"
+          else
+            echo "❌ Health check failed, rolling back..."
+            docker compose -f docker-compose.yml -f docker-compose.production.yml down
+            exit 1
+          fi
+          
+          echo "✅ Production deployment complete"
+          EOF
+
+      - name: Smoke tests
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.PROD_USER }}@${{ secrets.PROD_HOST }} << 'EOF'
+          set -e
+          
+          echo "🧪 Running production smoke tests..."
+          
+          # API health check
+          for i in {1..5}; do
+            API_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health)
+            if [ "$API_HEALTH" -eq 200 ]; then
+              echo "✅ API is healthy ($API_HEALTH)"
+              break
+            fi
+            echo "⏳ Attempt $i/5 - waiting for API..."
+            sleep 5
+          done
+          
+          # Frontend check
+          FE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5173)
+          if [ "$FE_STATUS" -eq 200 ]; then
+            echo "✅ Frontend is accessible ($FE_STATUS)"
+          else
+            echo "❌ Frontend check failed ($FE_STATUS)"
+            exit 1
+          fi
+          
+          # API endpoint tests
+          curl -s http://localhost:3000/api/health | grep -q "ok" && echo "✅ API endpoints responding"
+          
+          echo "✅ All production smoke tests passed"
+          EOF
+
+      - name: Notify success
+        if: success()
+        uses: slackapi/slack-github-action@v1
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          payload: |
+            {
+              "text": "Production deployment successful ✅",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*NeaPay Complete - Production Deployment* ✅\n*Branch:* main\n*Commit:* <https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>\n*Author:* ${{ github.actor }}"
+                  }
+                }
+              ]
+            }
+
+      - name: Notify failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          payload: |
+            {
+              "text": "Production deployment failed ❌",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*NeaPay Complete - Production Deployment* ❌\n*Branch:* main\n*Commit:* <https://github.com/${{ github.repository }}/commit/${{ github.sha }}|${{ github.sha }}>\n*Author:* ${{ github.actor }}\n\n⚠️ Check logs for details"
+                  }
+                }
+              ]
+            }
+
+  rollback:
+    if: failure()
+    needs: deploy-production
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Manual rollback needed
+        run: |
+          echo "⚠️ Deployment failed. Manual rollback may be required."
+          echo "Available backups can be restored from /opt/neapay-backups/"

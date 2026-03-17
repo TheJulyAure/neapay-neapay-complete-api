@@ -1,0 +1,181 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: neapay
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: neapay-secrets
+  namespace: neapay
+type: Opaque
+stringData:
+  database-url: "postgresql://neapay:CHANGE_ME@postgres.neapay.svc.cluster.local:5432/neapay"
+  redis-url: "redis://:CHANGE_ME@redis.neapay.svc.cluster.local:6379"
+  api-key: "CHANGE_ME"
+  api-secret: "CHANGE_ME"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: neapay-config
+  namespace: neapay
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+    
+    scrape_configs:
+    - job_name: 'neapay-api'
+      static_configs:
+      - targets: ['neapay-api:80']
+    
+    - job_name: 'neapay-frontend'
+      static_configs:
+      - targets: ['neapay-frontend:80']
+    
+    - job_name: 'kubernetes-apiservers'
+      kubernetes_sd_configs:
+      - role: endpoints
+      relabel_configs:
+      - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]
+        action: keep
+        regex: default;kubernetes;https
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: neapay-api
+  namespace: neapay
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: neapay-api
+  namespace: neapay
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: neapay-api
+  namespace: neapay
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: neapay-api
+subjects:
+- kind: ServiceAccount
+  name: neapay-api
+  namespace: neapay
+
+---
+apiVersion: policy/v1
+kind: NetworkPolicy
+metadata:
+  name: neapay-default-deny
+  namespace: neapay
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+
+---
+apiVersion: policy/v1
+kind: NetworkPolicy
+metadata:
+  name: neapay-api-allow
+  namespace: neapay
+spec:
+  podSelector:
+    matchLabels:
+      app: neapay-api
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: neapay-frontend
+    ports:
+    - protocol: TCP
+      port: 3000
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 3000
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+    ports:
+    - protocol: TCP
+      port: 5432
+  - to:
+    - podSelector:
+        matchLabels:
+          app: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+apiVersion: policy/v1
+kind: NetworkPolicy
+metadata:
+  name: neapay-frontend-allow
+  namespace: neapay
+spec:
+  podSelector:
+    matchLabels:
+      app: neapay-frontend
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector: {}
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: neapay-api
+    ports:
+    - protocol: TCP
+      port: 3000
+  - to:
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          k8s-app: kube-dns
+    ports:
+    - protocol: UDP
+      port: 53

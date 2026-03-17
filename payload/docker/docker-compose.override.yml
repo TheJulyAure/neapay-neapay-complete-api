@@ -1,0 +1,79 @@
+# docker-compose.override.yml - Local development override
+# This file automatically merges with docker-compose.yml when running 'docker compose up'
+# Purpose: Mount local source for fast development, expose dev ports, add healthchecks
+
+version: "3.9"
+
+services:
+  penthouse-api:
+    # Use local build context from existing docker-compose.yml
+    build:
+      context: ./penthouse-api
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./penthouse-api:/app:delegated
+      - /app/node_modules
+      - ./config/.env:/app/.env:ro
+    environment:
+      - NODE_ENV=development
+      - BUN_INSTALL=true
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    command: ["bun", "run", "dev"]
+    depends_on:
+      - database
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:3000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app:delegated
+      - /app/node_modules
+      - ./config/.env.local:/app/.env.local:ro
+    environment:
+      - VITE_DEV_SERVER_HOST=0.0.0.0
+      - VITE_DEV_SERVER_PORT=5173
+    ports:
+      - "5173:5173"
+    command: ["bun", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"]
+    depends_on:
+      - penthouse-api
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:5173 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  neapay:
+    build:
+      context: ./neapay
+      dockerfile: Dockerfile
+    volumes:
+      - ./neapay:/app:delegated
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    ports:
+      - "3001:3000"
+    command: ["bun", "run", "dev", "--", "--host", "0.0.0.0", "--port", "3000"]
+    restart: unless-stopped
+
+  database:
+    image: alpine:latest
+    # lightweight placeholder service so depends_on works
+    volumes:
+      - ./database:/data
+    restart: unless-stopped
+
+networks:
+  default:
+    name: neapay-local-net

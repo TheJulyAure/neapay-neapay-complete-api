@@ -1,0 +1,250 @@
+///////////////////////////////////////////////////////////////////////////////
+
+// NeaPay Complete — Enterprise Installer
+
+// Version: 1.0.0
+
+// Author: Eric Miller
+
+///////////////////////////////////////////////////////////////////////////////
+
+// ==========================================================================
+// GLOBAL VARIABLES
+// ==========================================================================
+
+#define PRODUCT_NAME "NeaPay Complete"
+#define PRODUCT_VERSION "1.0.0"
+#define PRODUCT_PUBLISHER "NeaPay"
+#define PRODUCT_WEB_SITE "https://neapay.com"
+#define INSTALL_DIR "$PROGRAMFILES$\\NeaPay\\Complete"
+#define DATA_DIR "$APPDATA$\\NeaPay\\Complete"
+#define LOGS_DIR "$APPDATA$\\NeaPay\\Complete\\logs"
+
+#define DOCKER_INSTALLER "$SUPPORTDIR$\\payload\\third-party\\docker-desktop-installer.exe"
+
+// ==========================================================================
+// PREINSTALL FUNCTION
+// ==========================================================================
+
+function preinstall()
+{
+    // Show welcome
+    ShowWelcomeMessage(PRODUCT_NAME + " v" + PRODUCT_VERSION + " Installer");
+    
+    // Check Windows version (Windows 10+)
+    if (GetSystemInfo(SI_WINDOWS_VERSION) < "10.0") {
+        ShowMessage(PRODUCT_NAME + " requires Windows 10 or later.", STOP);
+        exit(1);
+    }
+    
+    // Check disk space (500MB minimum)
+    if (GetDiskSpaceFree2(SYSTEM_DRIVE) < 500) {
+        ShowMessage("At least 500MB free disk space required.", STOP);
+        exit(1);
+    }
+    
+    // Check for Docker Desktop
+    if (!FileExists("C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe")) {
+        
+        if (AskYesNo("Docker Desktop is required. Install it now?", YES)) {
+            
+            if (!FileExists(DOCKER_INSTALLER)) {
+                ShowMessage("Docker installer missing from payload. Installation cannot continue.", STOP);
+                exit(1);
+            }
+            
+            LogMessage("Launching bundled Docker Desktop installer...");
+            
+            // Silent install (Docker supports --quiet flag)
+            ExecAndWait(DOCKER_INSTALLER, "install --quiet");
+            
+            Delay(10000); // Allow service registration
+            
+        } else {
+            ShowMessage(PRODUCT_NAME + " requires Docker Desktop.", STOP);
+            exit(1);
+        }
+    }
+    
+    // Verify Docker installed successfully
+    if (!FileExists("C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe")) {
+        ShowMessage("Docker Desktop installation failed or was cancelled.", STOP);
+        exit(1);
+    }
+    
+    // Ensure Docker service is running
+    if (!IsServiceRunning("com.docker.service")) {
+        LogMessage("Starting Docker service...");
+        StartService("com.docker.service");
+        Delay(5000);
+    }
+    
+    // Check for port conflicts
+    if (IsPortInUse(3000)) {
+        if (AskYesNo("Port 3000 is in use. Continue anyway?", NO)) {
+            LogMessage("User chose to continue despite port conflict.");
+        }
+    }
+    
+    if (IsPortInUse(5173)) {
+        if (AskYesNo("Port 5173 is in use. Continue anyway?", NO)) {
+            LogMessage("User chose to continue despite port conflict.");
+        }
+    }
+    
+    // Create installation directory
+    CreateDir(INSTALL_DIR);
+    CreateDir(DATA_DIR);
+    CreateDir(LOGS_DIR);
+    
+    LogMessage("Preinstall checks completed.");
+}
+
+// ==========================================================================
+// INSTALL FUNCTION
+// ==========================================================================
+
+function install()
+{
+    // Copy main application files
+    LogMessage("Copying application files...");
+    CopyDir("$SUPPORTDIR$\\payload\\neapay-complete", INSTALL_DIR);
+    
+    // Copy Docker configurations
+    LogMessage("Copying Docker configurations...");
+    CopyFile("$SUPPORTDIR$\\payload\\docker\\docker-compose.yml", INSTALL_DIR + "\\docker-compose.yml");
+    CopyFile("$SUPPORTDIR$\\payload\\docker\\docker-compose.override.yml", INSTALL_DIR + "\\docker-compose.override.yml");
+    
+    // Copy config templates
+    LogMessage("Copying configuration templates...");
+    CopyFile("$SUPPORTDIR$\\payload\\config\\.env.example", INSTALL_DIR + "\\.env.example");
+    
+    // Create .env from example if not exists
+    if (!FileExists(INSTALL_DIR + "\\.env")) {
+        CopyFile(INSTALL_DIR + "\\.env.example", INSTALL_DIR + "\\.env");
+    }
+    
+    // Copy PowerShell scripts
+    LogMessage("Copying scripts...");
+    if (FileExists("$SUPPORTDIR$\\payload\\neapay-complete\\run-dev.ps1")) {
+        CopyFile("$SUPPORTDIR$\\payload\\neapay-complete\\run-dev.ps1", INSTALL_DIR + "\\run-dev.ps1");
+    }
+    if (FileExists("$SUPPORTDIR$\\payload\\neapay-complete\\run-docker.ps1")) {
+        CopyFile("$SUPPORTDIR$\\payload\\neapay-complete\\run-docker.ps1", INSTALL_DIR + "\\run-docker.ps1");
+    }
+    if (FileExists("$SUPPORTDIR$\\payload\\neapay-complete\\open-browser.ps1")) {
+        CopyFile("$SUPPORTDIR$\\payload\\neapay-complete\\open-browser.ps1", INSTALL_DIR + "\\open-browser.ps1");
+    }
+    if (FileExists("$SUPPORTDIR$\\payload\\neapay-complete\\stop-dev.ps1")) {
+        CopyFile("$SUPPORTDIR$\\payload\\neapay-complete\\stop-dev.ps1", INSTALL_DIR + "\\stop-dev.ps1");
+    }
+    
+    // Create Start Menu shortcuts
+    LogMessage("Creating shortcuts...");
+    CreateShortcut("$START_MENU$\\Programs\\NeaPay\\NeaPay Complete.lnk", 
+                   INSTALL_DIR + "\\open-browser.ps1",
+                   "", 
+                   INSTALL_DIR, 
+                   0);
+    
+    CreateShortcut("$START_MENU$\\Programs\\NeaPay\\Uninstall.lnk", 
+                   "$ Uninstall.exe", 
+                   "", 
+                   "$INSTDIR", 
+                   0);
+    
+    // Create Desktop shortcut
+    CreateShortcut("$DESKTOP$\\NeaPay Complete.lnk", 
+                   INSTALL_DIR + "\\open-browser.ps1",
+                   "", 
+                   INSTALL_DIR, 
+                   0);
+    
+    // Register application
+    RegisterApplication(PRODUCT_NAME, PRODUCT_VERSION, INSTALL_DIR);
+    
+    // Write uninstall information
+    WriteUninstaller(INSTALL_DIR + "\\Uninstall.exe");
+    
+    LogMessage("Installation completed successfully.");
+}
+
+// ==========================================================================
+// POSTINSTALL FUNCTION
+// ==========================================================================
+
+function postinstall()
+{
+    // Show completion dialog
+    ShowMessage("NeaPay Complete has been successfully installed!\n\n" +
+                "Installation directory: " + INSTALL_DIR + "\n" +
+                "Data directory: " + DATA_DIR + "\n\n" +
+                "Click OK to open NeaPay in your browser.",
+                OK);
+    
+    // Open browser
+    LaunchApp("powershell.exe", "-ExecutionPolicy Bypass -File \"" + INSTALL_DIR + "\\open-browser.ps1\"");
+}
+
+// ==========================================================================
+// PREUNINSTALL FUNCTION
+// ==========================================================================
+
+function preuninstall()
+{
+    // Stop Docker containers if running
+    LogMessage("Stopping Docker containers...");
+    SetWorkingDir(INSTALL_DIR);
+    ExecAndWait("docker", "compose down");
+    
+    // Ask about data removal
+    if (AskYesNo("Remove all NeaPay data and logs?", NO)) {
+        if (FileExists(DATA_DIR)) {
+            DeleteDir(DATA_DIR, TRUE);
+        }
+        if (FileExists(LOGS_DIR)) {
+            DeleteDir(LOGS_DIR, TRUE);
+        }
+        LogMessage("User data removed.");
+    }
+}
+
+// ==========================================================================
+// UNINSTALL FUNCTION
+// ==========================================================================
+
+function uninstall()
+{
+    // Remove shortcuts
+    LogMessage("Removing shortcuts...");
+    DeleteFile("$START_MENU$\\Programs\\NeaPay\\NeaPay Complete.lnk");
+    DeleteFile("$START_MENU$\\Programs\\NeaPay\\Uninstall.lnk");
+    DeleteFile("$DESKTOP$\\NeaPay Complete.lnk");
+    
+    // Remove installation directory
+    LogMessage("Removing installation directory...");
+    DeleteDir(INSTALL_DIR, TRUE);
+    
+    // Unregister application
+    UnregisterApplication(PRODUCT_NAME);
+    
+    LogMessage("Uninstallation completed.");
+}
+
+// ==========================================================================
+// HELPER FUNCTIONS
+// ==========================================================================
+
+function IsPortInUse(port-number)
+{
+    // Simple check using netstat
+    GetDir(VAR_TEMP, TEMP_DIR);
+    TEMP_FILE = TEMP_DIR + "\\portcheck_" + ToString(Random()) + ".txt";
+    
+    ExecAndWait("cmd.exe", "/c netstat -ano | findstr :" + port-number + " > " + TEMP_FILE);
+    
+    result = GetFileSize(TEMP_FILE) > 0;
+    DeleteFile(TEMP_FILE);
+    
+    return result;
+}

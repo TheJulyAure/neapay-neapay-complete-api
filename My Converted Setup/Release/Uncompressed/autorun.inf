@@ -1,0 +1,4 @@
+[AutoRun]
+icon=My Converted Setup.exe,0
+label=theapp
+open=My Converted Setup.exe

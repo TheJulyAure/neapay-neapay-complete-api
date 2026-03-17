@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Product xmlns="http://www.installaware.com/product/14" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.installaware.com/product/14 http://www.installaware.com/schemas/product-14.xsd">
+  
+  <Identification>
+    <ProductCode>{8A9C4B2E-3D1F-4A5C-9E8D-7F6B4A2C1E3D}</ProductCode>
+    <UpgradeCode>{7B8D3C1F-2E9A-4B7D-8F5C-6E5A4B3D2C1F}</UpgradeCode>
+    <Version>1.0.0.0</Version>
+    <Revision>1</Revision>
+    <DisplayVersion>1.0.0</DisplayVersion>
+    <ProductName>NeaPay Complete</ProductName>
+    <ProductDescription>Unified Payment Platform - ISO8583, Stripe, Clover Integration</ProductDescription>
+    <Manufacturer>NeaPay</Manufacturer>
+    <ManufacturerURL>https://neapay.com</ManufacturerURL>
+    <ProductURL>https://dvcwnr.zo.space</ProductURL>
+    <SupportURL>https://support.neapay.com</SupportURL>
+    <AboutURL>https://neapay.com/about</AboutURL>
+    <Copyright>Copyright (c) 2024 NeaPay. All rights reserved.</Copyright>
+    <Trademark>NeaPay is a trademark of NeaPay Inc.</Trademark>
+    <Comments>Unified payment platform with ISO8583, Stripe, and Clover integrations.</Comments>
+  </Identification>
+  
+  <Requirements>
+    <OS>
+      <Platform name="Windows" version="10.0.17763" nameValue="Windows 10"/>
+      <Platform name="Windows Server" version="2019" nameValue="Windows Server 2019"/>
+    </OS>
+    <Hardware>
+      <DiskSpace unit="MB">500</DiskSpace>
+      <RAM unit="MB">2048</RAM>
+    </Hardware>
+    <Software>
+      <Dependency name="Docker Desktop" type="optional" 
+                   check="registry" key="HKLM\Software\Docker Inc.\Docker\DockerPreview" 
+                   compare="exists"/>
+    </Software>
+  </Requirements>
+  
+  <Features>
+    <Feature name="Core" display="yes" selected="yes">
+      <Description>NeaPay Complete core platform</Description>
+      <Components>
+        <Component name="penthouse-api" type="files" selected="yes">
+          <Description>API backend service</Description>
+          <Destination>$INSTALLDIR$\penthouse-api</Destination>
+        </Component>
+        <Component name="frontend" type="files" selected="yes">
+          <Description>React frontend dashboard</Description>
+          <Destination>$INSTALLDIR$\frontend</Destination>
+        </Component>
+        <Component name="sdk" type="files" selected="yes">
+          <Description>Python SDK for Apex-One integration</Description>
+          <Destination>$INSTALLDIR$\sdk</Destination>
+        </Component>
+      </Components>
+    </Feature>
+    
+    <Feature name="Configuration" display="yes" selected="yes">
+      <Description>Configuration files and examples</Description>
+      <Components>
+        <Component name="docker-compose" type="files" selected="yes">
+          <Description>Docker Compose configuration</Description>
+          <Destination>$INSTALLDIR$</Destination>
+        </Component>
+        <Component name="env-files" type="files" selected="yes">
+          <Description>Environment configuration templates</Description>
+          <Destination>$INSTALLDIR$\config</Destination>
+        </Component>
+      </Components>
+    </Feature>
+    
+    <Feature name="Documentation" display="yes" selected="no">
+      <Description>Documentation and guides</Description>
+      <Components>
+        <Component name="docs" type="files" selected="no">
+          <Description>Complete documentation</Description>
+          <Destination>$INSTALLDIR$\docs</Destination>
+        </Component>
+      </Components>
+    </Feature>
+    
+    <Feature name="WindowsIntegration" display="yes" selected="yes">
+      <Description>Windows shell integration</Description>
+      <Components>
+        <Component name="desktop-shortcut" type="shortcut" selected="yes">
+          <Description>Desktop shortcut</Description>
+          <Destination>$DESKTOP$</Destination>
+          <Target>$INSTALLDIR$\run-dev.ps1</Target>
+        </Component>
+        <Component name="startmenu" type="shortcut" selected="yes">
+          <Description>Start Menu folder</Description>
+          <Destination>$STARTMENU$\NeaPay</Destination>
+          <Target>$INSTALLDIR$\run-dev.ps1</Target>
+        </Component>
+      </Components>
+    </Feature>
+  </Features>
+  
+  <Resources>
+    <Icons>
+      <Icon name="AppIcon" source="$PROJECT_DIR/installaware/Media/app.ico"/>
+    </Icons>
+    <Images>
+      <Image name="Banner" source="$PROJECT_DIR/installaware/Media/banner.bmp" width="500" height="60"/>
+      <Image name="Welcome" source="$PROJECT_DIR/installaware/Media/welcome.bmp"/>
+      <Image name="Success" source="$PROJECT_DIR/installaware/Media/success.bmp"/>
+    </Images>
+  </Resources>
+  
+  <Strings language="en-US">
+    <String name="WelcomeTitle">Welcome to NeaPay Complete Setup</String>
+    <String name="WelcomeText">This wizard will guide you through the installation of NeaPay Complete - a unified payment processing platform.</String>
+    <String name="LicenseTitle">License Agreement</String>
+    <String name="LicenseText">Please read the following license agreement carefully before installing.</String>
+    <String name="DestinationTitle">Choose Install Location</String>
+    <String name="DestinationText">Select the folder where you want NeaPay Complete to be installed.</String>
+    <String name="PrerequisitesTitle">Prerequisites</String>
+    <String name="PrerequisitesText">The following components are required to run NeaPay Complete.</String>
+    <String name="CompleteTitle">Installation Complete</String>
+    <String name="CompleteText">NeaPay Complete has been successfully installed on your computer.</String>
+  </Strings>
+  
+  <Build>
+    <Output>
+      <Format>EXE</Format>
+      <Path>$PROJECT_DIR/Installers</Path>
+      <Name>NeaPayComplete-Setup-v%VERSION%.exe</Name>
+    </Output>
+    <Compression>
+      <Method>LZMA</Method>
+      <Level>9</Level>
+    </Compression>
+    <Signing>
+      <Enabled>no</Enabled>
+      <Certificate></Certificate>
+      <TimestampURL></TimestampURL>
+    </Signing>
+  </Build>
+</Product>

@@ -1,0 +1,95 @@
+name: Deploy to Staging
+
+on:
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  deploy-staging:
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.STAGING_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.STAGING_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy via SSH
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} << 'EOF'
+          set -e
+          cd /opt/neapay-complete
+          
+          echo "🔄 Pulling latest changes..."
+          git pull origin develop
+          
+          echo "🐳 Pulling latest images..."
+          docker compose pull
+          
+          echo "🚀 Deploying to staging..."
+          docker compose -f docker-compose.yml -f docker-compose.staging.yml down
+          docker compose -f docker-compose.yml -f docker-compose.staging.yml up -d
+          
+          echo "⏳ Waiting for services to be healthy..."
+          sleep 10
+          
+          docker compose ps
+          
+          echo "✅ Staging deployment complete"
+          EOF
+
+      - name: Smoke tests
+        run: |
+          ssh -i ~/.ssh/id_ed25519 ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} << 'EOF'
+          set -e
+          
+          echo "🧪 Running smoke tests..."
+          
+          # API health check
+          API_HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health)
+          if [ "$API_HEALTH" -eq 200 ]; then
+            echo "✅ API is healthy ($API_HEALTH)"
+          else
+            echo "❌ API health check failed ($API_HEALTH)"
+            exit 1
+          fi
+          
+          # Frontend check
+          FE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5173)
+          if [ "$FE_STATUS" -eq 200 ]; then
+            echo "✅ Frontend is accessible ($FE_STATUS)"
+          else
+            echo "❌ Frontend check failed ($FE_STATUS)"
+            exit 1
+          fi
+          
+          echo "✅ All smoke tests passed"
+          EOF
+
+      - name: Notify Slack
+        if: always()
+        uses: slackapi/slack-github-action@v1
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          payload: |
+            {
+              "text": "Staging deployment ${{ job.status }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*NeaPay Complete - Staging Deployment* ${{ job.status == 'success' && '✅' || '❌' }}\n*Branch:* develop\n*Commit:* ${{ github.sha }}"
+                  }
+                }
+              ]
+            }
