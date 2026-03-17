@@ -1,8 +1,5 @@
 version: '3.8'
 
-# Base Docker Compose configuration for NeaPay Complete
-# This file is extended by docker-compose.staging.yml or docker-compose.production.yml
-
 services:
   penthouse-api:
     build:
@@ -134,6 +131,34 @@ services:
       - '--storage.tsdb.retention.time=7d'
     networks:
       - unified
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  grafana-alloy:
+    build:
+      context: ./grafana-alloy
+      dockerfile: Dockerfile
+    image: neapay-grafana-alloy:latest
+    container_name: neapay-grafana-alloy
+    restart: always
+    environment:
+      GCLOUD_HOSTED_METRICS_ID: ${GCLOUD_HOSTED_METRICS_ID:-3049370}
+      GCLOUD_HOSTED_METRICS_URL: ${GCLOUD_HOSTED_METRICS_URL:-https://prometheus-prod-67-prod-us-west-0.grafana.net/api/prom/push}
+      GCLOUD_HOSTED_LOGS_ID: ${GCLOUD_HOSTED_LOGS_ID:-1520360}
+      GCLOUD_HOSTED_LOGS_URL: ${GCLOUD_HOSTED_LOGS_URL:-https://logs-prod-021.grafana.net/loki/api/v1/push}
+      GCLOUD_FM_URL: ${GCLOUD_FM_URL:-https://fleet-management-prod-014.grafana.net}
+      GCLOUD_FM_POLL_FREQUENCY: ${GCLOUD_FM_POLL_FREQUENCY:-60s}
+      GCLOUD_FM_HOSTED_ID: ${GCLOUD_FM_HOSTED_ID:-1562571}
+      ARCH: ${ARCH:-amd64}
+      GCLOUD_RW_API_KEY: ${GCLOUD_RW_API_KEY}
+    networks:
+      - unified
+    depends_on:
+      prometheus:
+        condition: service_started
     logging:
       driver: "json-file"
       options:

@@ -2,10 +2,7 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-
-RUN npm install --no-save express cors dotenv
-
+# Copy source directly without package.json requirement
 COPY server.js .
 
 EXPOSE 3000
