@@ -4,6 +4,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const ENVIRONMENT = process.env.NODE_ENV || 'development';
 const HEALTH_PAYLOAD = Object.freeze({ status: 'ok', service: 'penthouse-api' });
+const HEALTH_JSON = JSON.stringify(HEALTH_PAYLOAD);
 const READY_JSON = JSON.stringify({ ready: true });
 const VERSION_JSON = JSON.stringify({ version: '1.0.0', environment: ENVIRONMENT });
 
@@ -14,7 +15,7 @@ app.use(cors());
 app.get('/health', (req, res) => {
   res
     .type('application/json')
-    .send(JSON.stringify(HEALTH_PAYLOAD));
+    .send(HEALTH_JSON);
 });
 
 // Ready check endpoint
