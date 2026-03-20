@@ -2,34 +2,38 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const ENVIRONMENT = process.env.NODE_ENV || 'development';
+const HEALTH_PAYLOAD = Object.freeze({ status: 'ok', service: 'penthouse-api' });
+const HEALTH_JSON = JSON.stringify(HEALTH_PAYLOAD);
+const READY_JSON = JSON.stringify({ ready: true });
+const VERSION_JSON = JSON.stringify({ version: '1.0.0', environment: ENVIRONMENT });
 
+app.disable('x-powered-by');
 app.use(cors());
-app.use(express.json());
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'penthouse-api' });
+  res
+    .type('application/json')
+    .send(HEALTH_JSON);
 });
 
 // Ready check endpoint
 app.get('/ready', (req, res) => {
-  res.json({ ready: true });
+  res
+    .type('application/json')
+    .send(READY_JSON);
 });
 
 // API endpoints
 app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    service: 'penthouse-api',
-    timestamp: new Date().toISOString()
-  });
+  res.json({ ...HEALTH_PAYLOAD, timestamp: new Date().toISOString() });
 });
 
 app.get('/api/version', (req, res) => {
-  res.json({ 
-    version: '1.0.0',
-    environment: process.env.NODE_ENV || 'development'
-  });
+  res
+    .type('application/json')
+    .send(VERSION_JSON);
 });
 
 // 404 handler
@@ -45,5 +49,5 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`NeaPay API running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Environment: ${ENVIRONMENT}`);
 });
